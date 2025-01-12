@@ -10,17 +10,29 @@ def total_salary(path):
             lines = [line.strip() for line in file.readlines()]
         
         # Обчислення загальної та середньої зарплати
-        total = sum(int(item.split(',')[1]) for item in lines)
-        average = total / len(lines)
+        if not lines:
+            return 0, 0  # Повертає 0, якщо файл порожній
         
-        print(f"Загальна сума заробітної плати: {total}")
-        print(f"Середня заробітна плата: {average}")
+        salaries = []
+        for line in lines:
+            try:
+                name, salary = line.split(',')
+                salaries.append(float(salary))
+            except ValueError:
+                print(f"Некоректний рядок у файлі: {line}")
+        
+        total = sum(salaries)
+        average = total / len(salaries) if salaries else 0
+        
+        return total, average
+        
     except FileNotFoundError:
         print(f"Файл {file_path} не знайдено!")
     except ValueError:
         print("Помилка в обробці даних. Перевірте формат файлу.")
 
 # Виклик функції
-file_path = "salary_list.txt"
-total_salary(file_path)
+total, average = total_salary("salary_list.txt")
+print(f"Загальна сума заробітної плати: {total}, Середня заробітна плата: {average}")
+
 

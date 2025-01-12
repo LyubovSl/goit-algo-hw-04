@@ -9,17 +9,22 @@ def get_cats_info(path):
         with file_path.open("r", encoding="utf-8") as file:
             lines = [line.strip() for line in file.readlines()]
 
+        if not lines:
+            print("Файл порожній.")
+            return []
+        
         # Створення списку словників
         cats_list = []
         for entry in lines:
-            # Розділення рядка за комою
-            cat_id, name, age = entry.split(',')
-            # Додавання до списку словника
-            cats_list.append({
-                "id": cat_id,
-                "name": name,
-                "age": int(age)
-            })
+            try:
+                cat_id, name, age = entry.split(',')
+                cats_list.append({
+                    "id": cat_id,
+                    "name": name,
+                    "age": age
+                })
+            except ValueError:
+                print(f"Некоректний рядок: {entry}")
         return cats_list
     except FileNotFoundError:
         print(f"Файл {file_path} не знайдено!")
